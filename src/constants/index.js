@@ -14,7 +14,7 @@ export const GET_SPIRITS = "GET_SPIRITS";
 export const GET_CIDERS_AND_SODAS = "GET_CIDERS_AND_SODAS";
 export const ITEMS_PER_PAGE = 25;
 
-export const WINE_TYPES = [
+export const PRODUCT_TYPES = [
     "aromatised",
     "beer",
     "bubbly",

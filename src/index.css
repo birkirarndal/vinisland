@@ -3,7 +3,7 @@ body {
     font-family: "Libre Franklin";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: 1em;
+    /* padding: 1em; */
     text-align: center;
     justify-content: center;
     /* dark mode */

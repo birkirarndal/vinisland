@@ -6,7 +6,7 @@ export const Products = ({ data }) => {
             {data.map((product) => (
                 <div key={product.ProductID} className="product-container">
                     <div className="image-container">
-                        <img alt="red wine" src={product.image} />{" "}
+                        <img alt="Product img" src={product.image} />{" "}
                     </div>
                     <div className="product-info">
                         <div className="product-name">
@@ -19,6 +19,9 @@ export const Products = ({ data }) => {
                             {product.ProductBottledVolume < 1000
                                 ? `${product.ProductBottledVolume} ml`
                                 : `${product.ProductBottledVolume / 1000} L`}
+                        </div>
+                        <div className="product-alcohol">
+                            {product.ProductAlchoholVolume}%
                         </div>
                         <div className="product-price">
                             ÁTVR Price: {product.ProductPrice} kr.

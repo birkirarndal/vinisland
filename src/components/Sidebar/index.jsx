@@ -1,12 +1,24 @@
 import React from "react";
 import { useState } from "react";
 import "./styles.css";
-import { WINE_TYPES, FOOD_PAIRINGS, COUNTRIES, REGIONS } from "../../constants";
+import {
+    PRODUCT_TYPES,
+    FOOD_PAIRINGS,
+    COUNTRIES,
+    REGIONS,
+} from "../../constants";
 
-export const Sidebar = ({ updateSearch, search, handleFilterChange }) => {
+import { CustomCheckbox } from "../CustomCheckbox";
+
+export const Sidebar = ({
+    updateSearch,
+    search,
+    handleFilterChange,
+    handleCustomCheckboxChange,
+}) => {
     return (
         <div className="sidebar">
-            <h2>search</h2>
+            <h2>Search</h2>
             <form>
                 <div className="filter">
                     <div className="search-bar-container">
@@ -22,18 +34,23 @@ export const Sidebar = ({ updateSearch, search, handleFilterChange }) => {
                         />
                     </div>
 
-                    <h3>Wine type</h3>
+                    <h3>Product type</h3>
                     <div className="checkboxes">
-                        {WINE_TYPES.map((type) => (
-                            <label key={type}>
-                                <input
-                                    type="checkbox"
-                                    name="type"
-                                    id={type}
-                                    onChange={handleFilterChange}
-                                />
-                                {type}
-                            </label>
+                        {PRODUCT_TYPES.map((type) => (
+                            // <label key={type}>
+                            //     <input
+                            //         type="checkbox"
+                            //         name="type"
+                            //         id={type}
+                            //         onChange={handleFilterChange}
+                            //     />
+                            //     {type}
+                            // </label>
+                            <CustomCheckbox
+                                label={type}
+                                name="type"
+                                handleFilterChange={handleCustomCheckboxChange}
+                            />
                         ))}
                     </div>
 

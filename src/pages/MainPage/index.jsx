@@ -16,6 +16,7 @@ const MainPage = () => {
     const [regions, setRegions] = useState([]);
     const [foodPairings, setFoodPairings] = useState([]);
     const [wineTypes, setWineTypes] = useState([]);
+    const [wineTypesExclude, setWineTypesExclude] = useState([]);
     const [ratingMin, setRatingMin] = useState(0);
     const [ratingMax, setRatingMax] = useState(5);
     const [priceMin, setPriceMin] = useState(-Infinity);
@@ -43,6 +44,13 @@ const MainPage = () => {
                 productA = parseFloat(productA.Rating);
                 productB = parseFloat(productB.Rating);
             }
+            if (
+                type === "ProductAlchoholVolumeASC" ||
+                type === "ProductAlchoholVolumeDESC"
+            ) {
+                productA = parseFloat(productA.ProductAlchoholVolume);
+                productB = parseFloat(productB.ProductAlchoholVolume);
+            }
             if (type === "ProductNameASC" || type === "ProductPriceASC") {
                 return productA > productB ? 1 : -1;
             }
@@ -53,6 +61,12 @@ const MainPage = () => {
                 return productA > productB ? 1 : -1;
             }
             if (type === "RatingDESC") {
+                return productA < productB ? 1 : -1;
+            }
+            if (type === "ProductAlchoholVolumeASC") {
+                return productA > productB ? 1 : -1;
+            }
+            if (type === "ProductAlchoholVolumeDESC") {
                 return productA < productB ? 1 : -1;
             }
             return 0;
@@ -92,6 +106,28 @@ const MainPage = () => {
             );
             setCurrentData(filteredWines);
         }
+    };
+
+    const handleCustomCheckboxChange = (name, label, status) => {
+        if (name === "type") {
+            if (status === "include") {
+                setWineTypes([...wineTypes, label]);
+                setWineTypesExclude(
+                    wineTypesExclude.filter((type) => type !== label)
+                );
+            }
+            if (status === "exclude") {
+                setWineTypesExclude([...wineTypesExclude, label]);
+                setWineTypes(wineTypes.filter((type) => type !== label));
+            }
+            if (status === "neutral") {
+                setWineTypes(wineTypes.filter((type) => type !== label));
+                setWineTypesExclude(
+                    wineTypesExclude.filter((type) => type !== label)
+                );
+            }
+        }
+        // console.log({ name, label, status });
     };
 
     const handleFilterChange = (e) => {
@@ -156,6 +192,12 @@ const MainPage = () => {
             );
             console.log("filteredData", filteredData);
         }
+        if (wineTypesExclude.length) {
+            filteredData = filteredData.filter(
+                (wine) => !wineTypesExclude.includes(wine.ProductCategory.name)
+            );
+        }
+
         if (countries.length) {
             filteredData = filteredData.filter((wine) =>
                 countries.includes(wine.ProductCountryOfOrigin)
@@ -211,6 +253,7 @@ const MainPage = () => {
         ratingMin,
         allData,
         currentSort,
+        wineTypesExclude,
     ]);
 
     useEffect(() => {
@@ -254,6 +297,7 @@ const MainPage = () => {
                     updateSearch={updateSearch}
                     search={search}
                     handleFilterChange={handleFilterChange}
+                    handleCustomCheckboxChange={handleCustomCheckboxChange}
                 />
                 <div className="main-content">
                     <div className="content-header">
@@ -274,6 +318,12 @@ const MainPage = () => {
                             </option>
                             <option value="RatingASC">Rating low-high</option>
                             <option value="RatingDESC">Rating high-low</option>
+                            <option value="ProductAlchoholVolumeASC">
+                                Alcohol low-high
+                            </option>
+                            <option value="ProductAlchoholVolumeDESC">
+                                Alcohol high-low
+                            </option>
                         </select>
                     </div>
                     <div className="products">
