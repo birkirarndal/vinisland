@@ -19,7 +19,7 @@ export const CustomCheckbox = ({ label, name, handleFilterChange }) => {
                 ? Status.EXCLUDE
                 : Status.NEUTRAL;
         setStatus(nextState);
-        console.log({ name, label, status: nextState });
+        // console.log({ name, label, status: nextState });
         handleFilterChange(name, label, nextState);
     };
 

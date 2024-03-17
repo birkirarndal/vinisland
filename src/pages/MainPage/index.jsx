@@ -7,15 +7,15 @@ import { Sidebar } from "../../components/Sidebar";
 import { ITEMS_PER_PAGE } from "../../constants";
 
 const MainPage = () => {
-    const [allData, setAllData] = useState(data);
-    const [currentData, setCurrentData] = useState(allData);
+    const allData = data;
+    const [currentData, setCurrentData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentItems, setCurrentItems] = useState([]);
     const [search, setSearch] = useState("");
     const [countries, setCountries] = useState([]);
     const [countriesExclude, setCountriesExclude] = useState([]);
     const [regions, setRegions] = useState([]);
-    const [foodPairings, setFoodPairings] = useState([]);
+    // const [foodPairings, setFoodPairings] = useState([]);
     const [wineTypes, setWineTypes] = useState([]);
     const [wineTypesExclude, setWineTypesExclude] = useState([]);
     // const [ratingMin, setRatingMin] = useState(0);
@@ -24,7 +24,7 @@ const MainPage = () => {
     const [priceMax, setPriceMax] = useState(Infinity);
     const [ratingSliderValue, setRatingSliderValue] = useState([0, 5]);
     const [hideUpArrow, setHideUpArrow] = useState(false);
-    const [currentSort, setCurrentSort] = useState("ProductPriceDESC");
+    const [currentSort, setCurrentSort] = useState("RatingDESC");
     const [itemCount, setItemCount] = useState(0);
 
     useEffect(() => {
@@ -159,7 +159,7 @@ const MainPage = () => {
     const handleFilterChange = (e) => {
         if (e.target.name === "type") {
             if (e.target.checked) {
-                console.log("checked", e.target.id);
+                // console.log("checked", e.target.id);
                 setWineTypes([...wineTypes, e.target.id]);
             } else {
                 setWineTypes(wineTypes.filter((type) => type !== e.target.id));
@@ -207,7 +207,7 @@ const MainPage = () => {
     };
 
     useEffect(() => {
-        console.log("useEffect", wineTypes);
+        // console.log("useEffect", wineTypes);
         let filteredData = allData;
         if (search) {
             filteredData = filteredData.filter((wine) =>
@@ -218,7 +218,7 @@ const MainPage = () => {
             filteredData = filteredData.filter((wine) =>
                 wineTypes.includes(wine.ProductCategory.name)
             );
-            console.log("filteredData", filteredData);
+            // console.log("filteredData", filteredData);
         }
         if (wineTypesExclude.length) {
             filteredData = filteredData.filter(
