@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import Slider from "@mui/material/Slider";
+
 import "./styles.css";
 import {
     PRODUCT_TYPES,
@@ -15,6 +16,8 @@ export const Sidebar = ({
     search,
     handleFilterChange,
     handleCustomCheckboxChange,
+    handleSliderChange,
+    ratingSliderValue,
 }) => {
     return (
         <div className="sidebar">
@@ -47,6 +50,7 @@ export const Sidebar = ({
                             //     {type}
                             // </label>
                             <CustomCheckbox
+                                key={type}
                                 label={type}
                                 name="type"
                                 handleFilterChange={handleCustomCheckboxChange}
@@ -72,7 +76,7 @@ export const Sidebar = ({
 
                     <div>
                         <h3>Rating range</h3>
-                        <input
+                        {/* <input
                             type="float"
                             placeholder="min"
                             name="ratingMin"
@@ -83,20 +87,28 @@ export const Sidebar = ({
                             placeholder="max"
                             name="ratingMax"
                             onChange={handleFilterChange}
+                        /> */}
+                        <Slider
+                            sx={{ width: "90%" }}
+                            getAriaLabel={() => "Rating range"}
+                            value={[ratingSliderValue[0], ratingSliderValue[1]]}
+                            onChange={handleSliderChange}
+                            min={0}
+                            max={5}
+                            step={0.1}
+                            valueLabelDisplay="auto"
+                            getAriaValueText={() => "Rating range"}
                         />
                     </div>
                     <h3>Country</h3>
                     <div className="checkboxes">
                         {COUNTRIES.map((country) => (
-                            <label key={country}>
-                                <input
-                                    type="checkbox"
-                                    name="country"
-                                    id={country}
-                                    onChange={handleFilterChange}
-                                />
-                                {country}
-                            </label>
+                            <CustomCheckbox
+                                key={country}
+                                label={country}
+                                name="country"
+                                handleFilterChange={handleCustomCheckboxChange}
+                            />
                         ))}
                     </div>
 

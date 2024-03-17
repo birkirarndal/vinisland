@@ -26,7 +26,6 @@ export const PRODUCT_TYPES = [
     "sakeandmead",
     "strong",
     "white",
-    "wrapper",
 ];
 export const COUNTRIES = [
     "argentína",
@@ -55,6 +54,36 @@ export const COUNTRIES = [
     "ítalía",
     "þýskaland",
 ];
+
+// countries in english
+export const COUNTRIES_EN = [
+    "Argentina",
+    "Armenia",
+    "Austria",
+    "United States",
+    "Bulgaria",
+    "Chile",
+    "France",
+    "Georgia",
+    "Greece",
+    "Croatia",
+    "Lebanon",
+    "Macedonia",
+    "Morocco",
+    "Moldova",
+    "New Zealand",
+    "Portugal",
+    "Romania",
+    "Spain",
+    "South Africa",
+    "Hungary",
+    "Uruguay",
+    "Australia",
+    "Israel",
+    "Italy",
+    "Germany",
+];
+
 export const REGIONS = [
     "",
     "Abruzzo",

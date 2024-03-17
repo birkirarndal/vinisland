@@ -57,3 +57,7 @@
 .search-bar::placeholder {
     color: #ccc;
 }
+
+.rating-slider {
+    width: 150px;
+}

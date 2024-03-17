@@ -13,16 +13,19 @@ const MainPage = () => {
     const [currentItems, setCurrentItems] = useState([]);
     const [search, setSearch] = useState("");
     const [countries, setCountries] = useState([]);
+    const [countriesExclude, setCountriesExclude] = useState([]);
     const [regions, setRegions] = useState([]);
     const [foodPairings, setFoodPairings] = useState([]);
     const [wineTypes, setWineTypes] = useState([]);
     const [wineTypesExclude, setWineTypesExclude] = useState([]);
-    const [ratingMin, setRatingMin] = useState(0);
-    const [ratingMax, setRatingMax] = useState(5);
+    // const [ratingMin, setRatingMin] = useState(0);
+    // const [ratingMax, setRatingMax] = useState(5);
     const [priceMin, setPriceMin] = useState(-Infinity);
     const [priceMax, setPriceMax] = useState(Infinity);
+    const [ratingSliderValue, setRatingSliderValue] = useState([0, 5]);
     const [hideUpArrow, setHideUpArrow] = useState(false);
     const [currentSort, setCurrentSort] = useState("ProductPriceDESC");
+    const [itemCount, setItemCount] = useState(0);
 
     useEffect(() => {
         setCurrentItems(currentData.slice(0, ITEMS_PER_PAGE));
@@ -42,7 +45,14 @@ const MainPage = () => {
             }
             if (type === "RatingASC" || type === "RatingDESC") {
                 productA = parseFloat(productA.Rating);
+                if (isNaN(productA)) {
+                    productA = 0;
+                }
+
                 productB = parseFloat(productB.Rating);
+                if (isNaN(productB)) {
+                    productB = 0;
+                }
             }
             if (
                 type === "ProductAlchoholVolumeASC" ||
@@ -94,12 +104,10 @@ const MainPage = () => {
     }, [currentData]);
 
     const updateSearch = (search) => {
-        // if search is empty
         if (search === "") {
             setCurrentData(data);
             setSearch("");
         } else {
-            // filter data
             setSearch(search);
             const filteredWines = allData.filter((wine) =>
                 wine.ProductName.toLowerCase().includes(search.toLowerCase())
@@ -109,25 +117,43 @@ const MainPage = () => {
     };
 
     const handleCustomCheckboxChange = (name, label, status) => {
+        let setFunc;
+        let setFuncExclude;
+        let currentArray;
+        let currentExcludeArray;
         if (name === "type") {
-            if (status === "include") {
-                setWineTypes([...wineTypes, label]);
-                setWineTypesExclude(
-                    wineTypesExclude.filter((type) => type !== label)
-                );
-            }
-            if (status === "exclude") {
-                setWineTypesExclude([...wineTypesExclude, label]);
-                setWineTypes(wineTypes.filter((type) => type !== label));
-            }
-            if (status === "neutral") {
-                setWineTypes(wineTypes.filter((type) => type !== label));
-                setWineTypesExclude(
-                    wineTypesExclude.filter((type) => type !== label)
-                );
-            }
+            setFunc = setWineTypes;
+            setFuncExclude = setWineTypesExclude;
+            currentArray = wineTypes;
+            currentExcludeArray = wineTypesExclude;
         }
-        // console.log({ name, label, status });
+        if (name === "country") {
+            setFunc = setCountries;
+            setFuncExclude = setCountriesExclude;
+            currentArray = countries;
+            currentExcludeArray = countriesExclude;
+        }
+
+        if (status === "include") {
+            setFunc([...currentArray, label]);
+            setFuncExclude(
+                currentExcludeArray.filter((type) => type !== label)
+            );
+        }
+        if (status === "exclude") {
+            setFuncExclude([...currentExcludeArray, label]);
+            setFunc(currentArray.filter((type) => type !== label));
+        }
+        if (status === "neutral") {
+            setWineTypes(currentArray.filter((type) => type !== label));
+            setFuncExclude(
+                currentExcludeArray.filter((type) => type !== label)
+            );
+        }
+    };
+
+    const handleSliderChange = (e, newValue) => {
+        setRatingSliderValue(newValue);
     };
 
     const handleFilterChange = (e) => {
@@ -139,43 +165,45 @@ const MainPage = () => {
                 setWineTypes(wineTypes.filter((type) => type !== e.target.id));
             }
         }
-        if (e.target.name === "country") {
-            if (e.target.checked) {
-                setCountries([...countries, e.target.id]);
-            } else {
-                setCountries(
-                    countries.filter((country) => country !== e.target.id)
-                );
-            }
-        }
-        if (e.target.name === "region") {
-            if (e.target.checked) {
-                setRegions([...regions, e.target.id]);
-            } else {
-                setRegions(regions.filter((region) => region !== e.target.id));
-            }
-        }
-        if (e.target.name === "foodPairing") {
-            if (e.target.checked) {
-                setFoodPairings([...foodPairings, e.target.id]);
-            } else {
-                setFoodPairings(
-                    foodPairings.filter((pairing) => pairing !== e.target.id)
-                );
-            }
-        }
+        // if (e.target.name === "country") {
+        //     if (e.target.checked) {
+        //         setCountries([...countries, e.target.id]);
+        //     } else {
+        //         setCountries(
+        //             countries.filter((country) => country !== e.target.id)
+        //         );
+        //     }
+        // }
+        // if (e.target.name === "region") {
+        //     if (e.target.checked) {
+        //         setRegions([...regions, e.target.id]);
+        //     } else {
+        //         setRegions(regions.filter((region) => region !== e.target.id));
+        //     }
+        // }
+        // if (e.target.name === "foodPairing") {
+        //     if (e.target.checked) {
+        //         setFoodPairings([...foodPairings, e.target.id]);
+        //     } else {
+        //         setFoodPairings(
+        //             foodPairings.filter((pairing) => pairing !== e.target.id)
+        //         );
+        //     }
+        // }
+
         if (e.target.name === "priceMin") {
             setPriceMin(e.target.value);
         }
         if (e.target.name === "priceMax") {
             setPriceMax(e.target.value);
         }
-        if (e.target.name === "ratingMin") {
-            setRatingMin(e.target.value);
-        }
-        if (e.target.name === "ratingMax") {
-            setRatingMax(e.target.value);
-        }
+
+        // if (e.target.name === "ratingMin") {
+        //     setRatingMin(e.target.value);
+        // }
+        // if (e.target.name === "ratingMax") {
+        //     setRatingMax(e.target.value);
+        // }
     };
 
     useEffect(() => {
@@ -203,6 +231,14 @@ const MainPage = () => {
                 countries.includes(wine.ProductCountryOfOrigin)
             );
         }
+
+        if (countriesExclude.length) {
+            filteredData = filteredData.filter(
+                (wine) =>
+                    !countriesExclude.includes(wine.ProductCountryOfOrigin)
+            );
+        }
+
         if (regions.length) {
             filteredData = filteredData.filter((wine) =>
                 regions.includes(wine.ProductPlaceOfOrigin)
@@ -224,36 +260,45 @@ const MainPage = () => {
                 (wine) => wine.ProductPrice <= priceMax
             );
         }
-        if (ratingMin !== 0) {
-            if (ratingMin === "") {
-                setRatingMin(0);
-            }
+        if (ratingSliderValue[0] !== 0 || ratingSliderValue[1] !== 5) {
             filteredData = filteredData.filter(
-                (wine) => wine.Rating >= ratingMin
+                (wine) =>
+                    wine.Rating >= ratingSliderValue[0] &&
+                    wine.Rating <= ratingSliderValue[1]
             );
         }
-        if (ratingMax !== 5) {
-            if (ratingMax === "") {
-                setRatingMax(5);
-            }
-            filteredData = filteredData.filter(
-                (wine) => wine.Rating <= ratingMax
-            );
-        }
+
+        // if (ratingMin !== 0) {
+        //     if (ratingMin === "") {
+        //         setRatingMin(0);
+        //     }
+        //     filteredData = filteredData.filter(
+        //         (wine) => wine.Rating >= ratingMin
+        //     );
+        // }
+        // if (ratingMax !== 5) {
+        //     if (ratingMax === "") {
+        //         setRatingMax(5);
+        //     }
+        //     filteredData = filteredData.filter(
+        //         (wine) => wine.Rating <= ratingMax
+        //     );
+        // }
         let sortedData = SortData(currentSort, filteredData);
         setCurrentData(sortedData);
+        setItemCount(sortedData.length);
     }, [
         search,
         wineTypes,
         countries,
         regions,
-        priceMax,
         priceMin,
-        ratingMax,
-        ratingMin,
+        priceMax,
+        ratingSliderValue,
         allData,
         currentSort,
         wineTypesExclude,
+        countriesExclude,
     ]);
 
     useEffect(() => {
@@ -298,9 +343,13 @@ const MainPage = () => {
                     search={search}
                     handleFilterChange={handleFilterChange}
                     handleCustomCheckboxChange={handleCustomCheckboxChange}
+                    handleSliderChange={handleSliderChange}
+                    ratingSliderValue={ratingSliderValue}
                 />
                 <div className="main-content">
                     <div className="content-header">
+                        <h4>Product amount</h4>
+                        <p>{itemCount}</p>
                         <h3>Sort by</h3>
                         <select
                             name="sort"
