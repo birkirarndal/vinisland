@@ -9,6 +9,7 @@
     margin: 0px;
     background-color: var(--secondary-bg-color);
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
 }
 
 .checkboxes {
