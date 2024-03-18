@@ -2,14 +2,15 @@ import React from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-export const SortDropdown = ({ setCurrentSort }) => {
+export const SortDropdown = ({ setCurrentSort, CurrentSort }) => {
     return (
         <Select
             sx={{ backgroundColor: "white" }}
             name="sort"
             id="sort"
             onChange={(e) => setCurrentSort(e.target.value)}
-            value="ProductPriceDESC"
+            value={CurrentSort}
+            defaultValue="RatingDESC"
         >
             <MenuItem value="ProductNameASC">Name A-z</MenuItem>
             <MenuItem value="ProductNameDESC">Name Z-a</MenuItem>

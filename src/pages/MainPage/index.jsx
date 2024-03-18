@@ -297,10 +297,21 @@ const MainPage = () => {
                 />
                 <div className="main-content">
                     <div className="content-header">
+                        <p>
+                            Pörun á milli Vivino og vinbúðarinnar er ekki 100%,
+                            endilega notið linkanna til að athuga.
+                            <br />
+                            Öll gögn eru í eigu ÁTVR nema einkunn sem er í eigu
+                            Vivino.
+                        </p>
+
                         <h4>Product amount</h4>
                         <p>{itemCount}</p>
                         <h3>Sort by</h3>
-                        <SortDropdown setCurrentSort={setCurrentSort} />
+                        <SortDropdown
+                            setCurrentSort={setCurrentSort}
+                            currentSort={currentSort}
+                        />
                     </div>
                     <div className="products">
                         <Products data={currentItems} />
