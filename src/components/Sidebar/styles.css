@@ -1,12 +1,13 @@
 .sidebar {
     position: sticky;
+    box-sizing: border-box;
     top: 0;
     height: 100vh;
-    min-width: 300px;
-    flex: 20;
+    width: 400px;
+    flex: 0, 0, 400px;
     padding: 10px;
-    margin: 0px 10px 0px 0px;
-    background-color: #ccc;
+    margin: 0px;
+    background-color: var(--secondary-bg-color);
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -40,7 +41,7 @@
     margin: 10px;
     max-width: 300px;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid var(--secondary-bg-color);
     border-radius: 25px;
     background-image: url("https://img.icons8.com/ios/50/000000/search--v1.png");
     background-repeat: no-repeat;
@@ -60,4 +61,14 @@
 
 .rating-slider {
     width: 150px;
+}
+
+@media screen and (max-width: 800px) {
+    .sidebar {
+        display: none;
+        position: relative;
+        top: 0;
+        height: auto;
+        width: 100%;
+    }
 }

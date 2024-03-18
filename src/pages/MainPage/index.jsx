@@ -3,8 +3,9 @@ import "./styles.css";
 import data from "../../resources/data.json";
 import { Products } from "../../components/Product";
 import { Sidebar } from "../../components/Sidebar";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import { ITEMS_PER_PAGE } from "../../constants";
+import { SortDropdown } from "../../components/SortDropdown";
 
 const MainPage = () => {
     const allData = data;
@@ -31,7 +32,7 @@ const MainPage = () => {
         setCurrentItems(currentData.slice(0, ITEMS_PER_PAGE));
     }, [currentData]);
 
-    const SortData = (type, data) => {
+    const sortData = (type, data) => {
         const sortedData = [...data].sort((a, b) => {
             let productA = a;
             let productB = b;
@@ -85,7 +86,7 @@ const MainPage = () => {
     };
 
     useEffect(() => {
-        setCurrentData((currentData) => SortData(currentSort, currentData));
+        setCurrentData((currentData) => sortData(currentSort, currentData));
     }, [currentSort]);
 
     const loadMoreItems = useCallback(() => {
@@ -109,8 +110,9 @@ const MainPage = () => {
             setSearch("");
         } else {
             setSearch(search);
+            const lowerCaseSearch = search.toLowerCase();
             const filteredWines = allData.filter((wine) =>
-                wine.ProductName.toLowerCase().includes(search.toLowerCase())
+                wine.ProductName.toLowerCase().includes(lowerCaseSearch)
             );
             setCurrentData(filteredWines);
         }
@@ -165,31 +167,6 @@ const MainPage = () => {
                 setWineTypes(wineTypes.filter((type) => type !== e.target.id));
             }
         }
-        // if (e.target.name === "country") {
-        //     if (e.target.checked) {
-        //         setCountries([...countries, e.target.id]);
-        //     } else {
-        //         setCountries(
-        //             countries.filter((country) => country !== e.target.id)
-        //         );
-        //     }
-        // }
-        // if (e.target.name === "region") {
-        //     if (e.target.checked) {
-        //         setRegions([...regions, e.target.id]);
-        //     } else {
-        //         setRegions(regions.filter((region) => region !== e.target.id));
-        //     }
-        // }
-        // if (e.target.name === "foodPairing") {
-        //     if (e.target.checked) {
-        //         setFoodPairings([...foodPairings, e.target.id]);
-        //     } else {
-        //         setFoodPairings(
-        //             foodPairings.filter((pairing) => pairing !== e.target.id)
-        //         );
-        //     }
-        // }
 
         if (e.target.name === "priceMin") {
             setPriceMin(e.target.value);
@@ -197,17 +174,9 @@ const MainPage = () => {
         if (e.target.name === "priceMax") {
             setPriceMax(e.target.value);
         }
-
-        // if (e.target.name === "ratingMin") {
-        //     setRatingMin(e.target.value);
-        // }
-        // if (e.target.name === "ratingMax") {
-        //     setRatingMax(e.target.value);
-        // }
     };
 
     useEffect(() => {
-        // console.log("useEffect", wineTypes);
         let filteredData = allData;
         if (search) {
             filteredData = filteredData.filter((wine) =>
@@ -218,7 +187,6 @@ const MainPage = () => {
             filteredData = filteredData.filter((wine) =>
                 wineTypes.includes(wine.ProductCategory.name)
             );
-            // console.log("filteredData", filteredData);
         }
         if (wineTypesExclude.length) {
             filteredData = filteredData.filter(
@@ -268,23 +236,7 @@ const MainPage = () => {
             );
         }
 
-        // if (ratingMin !== 0) {
-        //     if (ratingMin === "") {
-        //         setRatingMin(0);
-        //     }
-        //     filteredData = filteredData.filter(
-        //         (wine) => wine.Rating >= ratingMin
-        //     );
-        // }
-        // if (ratingMax !== 5) {
-        //     if (ratingMax === "") {
-        //         setRatingMax(5);
-        //     }
-        //     filteredData = filteredData.filter(
-        //         (wine) => wine.Rating <= ratingMax
-        //     );
-        // }
-        let sortedData = SortData(currentSort, filteredData);
+        let sortedData = sortData(currentSort, filteredData);
         setCurrentData(sortedData);
         setItemCount(sortedData.length);
     }, [
@@ -308,29 +260,26 @@ const MainPage = () => {
             } else {
                 setHideUpArrow(false);
             }
+            loadMoreItems();
         };
         window.addEventListener("scroll", handleScroll);
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [loadMoreItems]);
+
+    // useEffect(() => {
+    //     window.addEventListener("scroll", loadMoreItems);
+    //     return () => {
+    //         window.removeEventListener("scroll", loadMoreItems);
+    //     };
+    // }, [currentData, loadMoreItems]);
 
     useEffect(() => {
-        window.addEventListener("scroll", loadMoreItems);
-        return () => {
-            window.removeEventListener("scroll", loadMoreItems);
-        };
-    }, [currentData, loadMoreItems]);
-
-    useEffect(() => {
-        if (loading) {
+        if (currentData.length > 0) {
             setLoading(false);
         }
-    }, [loading]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    }, [currentData]);
 
     return (
         <div>
@@ -351,32 +300,11 @@ const MainPage = () => {
                         <h4>Product amount</h4>
                         <p>{itemCount}</p>
                         <h3>Sort by</h3>
-                        <select
-                            name="sort"
-                            id="sort"
-                            onChange={(e) => setCurrentSort(e.target.value)}
-                            defaultValue="ProductPriceDESC"
-                        >
-                            <option value="ProductNameASC">Name A-z</option>
-                            <option value="ProductNameDESC">Name Z-a</option>
-                            <option value="ProductPriceASC">
-                                Price low-high
-                            </option>
-                            <option value="ProductPriceDESC">
-                                Price high-low
-                            </option>
-                            <option value="RatingASC">Rating low-high</option>
-                            <option value="RatingDESC">Rating high-low</option>
-                            <option value="ProductAlchoholVolumeASC">
-                                Alcohol low-high
-                            </option>
-                            <option value="ProductAlchoholVolumeDESC">
-                                Alcohol high-low
-                            </option>
-                        </select>
+                        <SortDropdown setCurrentSort={setCurrentSort} />
                     </div>
                     <div className="products">
                         <Products data={currentItems} />
+                        {loading && <CircularProgress />}
                     </div>
                 </div>
             </div>

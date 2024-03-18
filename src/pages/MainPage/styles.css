@@ -4,10 +4,11 @@
     justify-content: center;
     border-radius: 10px;
     row-gap: 15px;
+    min-height: 100vh;
 }
 
 .main-content {
-    flex: 80;
+    flex: 1;
 }
 
 .hide {
@@ -31,7 +32,7 @@
     color: white;
     cursor: pointer;
     padding: 15px;
-    width: 50px;
+    width: 25px;
     height: 25px;
     border-radius: 25%;
     transition: background-color 0.3s;
@@ -42,20 +43,9 @@
     background-color: #555;
 }
 
-.search {
-    flex: 200px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ccc;
-}
-
 .products {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     justify-content: space-around;
     align-items: center;
     row-gap: 15px;
@@ -63,40 +53,18 @@
     flex: 1;
 }
 
-.sticky {
-    position: fixed;
-    top: 0;
-    z-index: 1;
-    width: 1178px;
-    height: 200px;
-}
-
-/* pagination */
-
-ul#page-numbers {
-    display: flex;
-    list-style-type: none;
-    padding: 0;
-    justify-content: center;
-}
-
-ul#page-numbers li {
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-ul#page-numbers li.active {
-    font-weight: bold;
-}
-
-.not-sticky {
-}
-
-.search-placeholder {
-    flex: 200px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+@media screen and (max-width: 800px) {
+    .content {
+        flex-direction: column;
+    }
+    .main-content {
+        flex: 100;
+    }
+    .up-arrow {
+        bottom: 10px;
+        right: 10px;
+    }
+    .products {
+        flex-direction: column;
+    }
 }
