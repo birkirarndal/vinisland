@@ -24,7 +24,7 @@ const MainPage = () => {
     const [priceMin, setPriceMin] = useState(-Infinity);
     const [priceMax, setPriceMax] = useState(Infinity);
     const [ratingSliderValue, setRatingSliderValue] = useState([0, 5]);
-    const [hideUpArrow, setHideUpArrow] = useState(false);
+    const [hideUpArrow, setHideUpArrow] = useState(true);
     const [currentSort, setCurrentSort] = useState("RatingDESC");
     const [itemCount, setItemCount] = useState(0);
 
